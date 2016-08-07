@@ -1,11 +1,14 @@
-char* names[] = {"mini Tomato", "blueberry"};
+char* names[] = {"mini Tomatoes", "big Tomatoes", "blueberry"};
 int pins[] = {2, 3};
-unsigned long timeOn[] = {420000, 420000}; // time that the pump stays on for each 10000 = 10s
+unsigned long timeOn[] = {420000, 420000, 20000}; // time that the pump stays on for each 10000 = 10s
 // 420000 = 7 minutes
-unsigned long timeOff[] = {3180000, 3180000}; // time pump stays off -- 3600000 = 1 hr
+unsigned long timeOff[] = {3180000, 3180000, 3180000}; // time pump stays off -- 3600000 = 1 hr
 // 3180000 = 53 minutes
-unsigned long startTime[] = {0, millis()}; // time pump was turned on, in ms
-bool pumpOn[] = {true, false};
+unsigned long startTime[] = {0, 0, 0}; // time pump was turned on, in ms
+unsigned long startDelay[] = {0, 500000, 1000000}; // delay before starting cycle
+unsigned long timeNow; // current time in ms
+
+bool pumpOn[] = {false, false};
 bool disable[] = {false, false};
 
 int pumps = sizeof(pins)/sizeof(int);
@@ -16,19 +19,22 @@ void setup() {
   initializePumps();
   //testPumps();
   digitalWrite(pins[0], 1);
-  Serial.println("pump on");
+  Serial.println("pump 0 on");
   startTime[0] = millis();
   pumpOn[0] = true;
 }
 
 void loop() {
   for (int i = 0; i<pumps; i++) {
+    timeNow = millis();
     if (disable[i]) {continue;};
     if (pumpOn[i])
     {
-      if (millis() - startTime[i] > timeOn[i])
+      if (timeNow > startTime[i] && timeNow - startTime[i] > timeOn[i])
       {
-        Serial.println("pump off");
+        Serial.print("pump ");
+        Serial.print(i);
+        Serial.println(" off");
         digitalWrite(pins[i], 0);
         startTime[i] = millis();
         pumpOn[i] = false;
@@ -36,12 +42,29 @@ void loop() {
     }
     else if (not pumpOn[i])
     {
-      if (millis() - startTime[i] > timeOff[i])
+      if (timeNow > startDelay[i])
       {
-        digitalWrite(pins[i], 1);
-        Serial.println("pump on");
-        startTime[i] = millis();
-        pumpOn[i] = true;
+        if (startDelay[i] > 0 and timeNow > startDelay[i])
+        {
+          Serial.println(millis() - startTime[i] - startDelay[i]);
+          digitalWrite(pins[i], 1);
+          Serial.print("pump ");
+          Serial.print(i);
+          Serial.println(" on");
+          startTime[i] = millis();
+          pumpOn[i] = true;
+          startDelay[i] = 0;
+        }
+        if (timeNow - startTime[i] > timeOff[i])
+        {
+          digitalWrite(pins[i], 1);
+          Serial.print("pump ");
+          Serial.print(i);
+          Serial.println(" on");
+          startTime[i] = millis();
+          pumpOn[i] = true;
+          startDelay[i] = 0;
+        }
       }
     }
   }
