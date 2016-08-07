@@ -1,5 +1,5 @@
 char* names[] = {"mini Tomatoes", "big Tomatoes", "blueberry"};
-int pins[] = {2, 3};
+int pins[] = {2, 3, 4};
 unsigned long timeOn[] = {420000, 420000, 20000}; // time that the pump stays on for each 10000 = 10s
 // 420000 = 7 minutes
 unsigned long timeOff[] = {3180000, 3180000, 3180000}; // time pump stays off -- 3600000 = 1 hr
