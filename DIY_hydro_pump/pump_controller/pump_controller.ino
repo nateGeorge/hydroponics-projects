@@ -1,15 +1,15 @@
 char* names[] = {"mini Tomatoes", "big Tomatoes", "blueberry"};
 int pins[] = {2, 3, 4};
-unsigned long timeOn[] = {420000, 420000, 20000}; // time that the pump stays on for each 10000 = 10s
+unsigned long timeOn[] = {420000, 420000, 60000}; // time that the pump stays on for each 10000 = 10s
 // 420000 = 7 minutes
-unsigned long timeOff[] = {3180000, 3180000, 3180000}; // time pump stays off -- 3600000 = 1 hr
+unsigned long timeOff[] = {3180000, 3180000, 3540000}; // time pump stays off -- 3600000 = 1 hr
 // 3180000 = 53 minutes
 unsigned long startTime[] = {0, 0, 0}; // time pump was turned on, in ms
 unsigned long startDelay[] = {0, 500000, 1000000}; // delay before starting cycle
 unsigned long timeNow; // current time in ms
 
-bool pumpOn[] = {false, false};
-bool disable[] = {false, false};
+bool pumpOn[] = {false, false, false};
+bool disable[] = {false, false, false};
 
 int pumps = sizeof(pins)/sizeof(int);
 
@@ -46,7 +46,6 @@ void loop() {
       {
         if (startDelay[i] > 0 and timeNow > startDelay[i])
         {
-          Serial.println(millis() - startTime[i] - startDelay[i]);
           digitalWrite(pins[i], 1);
           Serial.print("pump ");
           Serial.print(i);
