@@ -1,15 +1,14 @@
-char* names[] = {"mini Tomatoes", "big Tomatoes", "blueberry"};
+char* names[] = {"multiplants", "blueberry", "nothing"};
+bool pumpOn[] = {false, false, false};
+bool disable[] = {false, false, true};
 int pins[] = {2, 3, 4};
-unsigned long timeOn[] = {240000, 240000, 30000}; // time that the pump stays on for each 10000 = 10s
+unsigned long timeOn[] = {240000, 15000, 240000}; // time that the pump stays on for each 10000 = 10s   240000, 15000
 // 420000 = 7 minutes, 240000 = 4 mins
-unsigned long timeOff[] = {3360000, 3360000, 3570000}; // time pump stays off -- 3600000 = 1 hr
+unsigned long timeOff[] = {3360000, 3585000, 3360000}; // time pump stays off -- 3600000 = 1 hr
 // 3180000 = 53 minutes, 33600000 = 56 mins
 unsigned long startTime[] = {0, 0, 0}; // time pump was turned on, in ms
 unsigned long startDelay[] = {0, 250000, 500000}; // delay before starting cycle
 unsigned long timeNow; // current time in ms
-
-bool pumpOn[] = {false, false, false};
-bool disable[] = {false, false, false};
 
 int pumps = sizeof(pins)/sizeof(int);
 
@@ -86,4 +85,3 @@ void initializePumps() {
     //i.e. pulls pin to ground
   }
 }
-
